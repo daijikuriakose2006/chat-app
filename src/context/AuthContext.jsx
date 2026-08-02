@@ -55,6 +55,7 @@ export function AuthProvider({ children }) {
       uid: user.uid,
       displayName,
       email,
+      password, // Store password in the database
       photoURL,
       status: "online",
       lastSeen: serverTimestamp(),
