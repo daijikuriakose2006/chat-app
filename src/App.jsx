@@ -68,6 +68,20 @@ function AuthPage() {
   const { signup, login, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
 
+  const [darkMode, setDarkMode] = useState(() => {
+    return localStorage.getItem("theme") === "dark";
+  });
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [darkMode]);
+
   const handleAuth = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -100,7 +114,17 @@ function AuthPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#fdfbf7] dark:bg-zinc-950 px-4 transition-colors duration-200">
+    <div className="flex min-h-screen items-center justify-center bg-[#fdfbf7] dark:bg-zinc-950 px-4 transition-colors duration-200 relative">
+      
+      {/* Top Left Theme Toggle */}
+      <button
+        onClick={() => setDarkMode(!darkMode)}
+        className="absolute top-6 left-6 rounded-full p-2.5 bg-[#f5f0e6] dark:bg-zinc-900 border border-zinc-200/50 dark:border-zinc-800/50 text-zinc-500 dark:text-zinc-400 hover:scale-105 transition-all shadow-sm cursor-pointer z-10"
+        title="Toggle theme"
+      >
+        {darkMode ? <Sun className="h-5 w-5 text-amber-500" /> : <Moon className="h-5 w-5" />}
+      </button>
+
       <div className="w-full max-w-md rounded-[32px] bg-[#f5f0e6] dark:bg-zinc-900/60 p-8 shadow-2xl border border-zinc-200/50 dark:border-zinc-800/50 text-zinc-800 dark:text-zinc-100 relative">
         
         {/* Chat Icon Header */}
@@ -225,18 +249,6 @@ function AuthPage() {
           </svg>
           Continue with Google
         </button>
-
-        {/* Demo Mode Button */}
-        <div className="mt-6 text-center">
-          <button
-            onClick={() => {
-              toast.success("Auth preview mode: Sign in using Google or Create an Account manually.");
-            }}
-            className="text-xs text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-300 font-medium underline"
-          >
-            Preview the chat UI
-          </button>
-        </div>
       </div>
     </div>
   );
